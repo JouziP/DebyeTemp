@@ -24,16 +24,25 @@ def get_demons(experimental_temps,
     demon_number_ceil = [ (0, np.ceil((cp/(k_b*Na) - n_kinetic)) )[(cp/(k_b*Na) - n_kinetic) > 0] \
                 for cp in  np.array(Cp_debye) ]
     ### calculate floor weight: the diference between cp/(k_b*Na) - n_kinetic and floor
-    pass
+    weight_floor = [1 -\
+                    np.sqrt(np.abs(demon_number_floor[i]-\
+                                   Cp_debye[i]/(k_b*Na)+n_kinetic)**2)  \
+            for i in range(len( demon_number_floor))       \
+            ]
     ### calculate ceil weight: the diference between cp/(k_b*Na) - n_kinetic and ceil
-    pass
+    weight_ceil = [1 -\
+                   np.sqrt(np.abs(demon_number_ceil[i]-\
+                                   Cp_debye[i]/(k_b*Na)+n_kinetic)**2)  \
+            for i in range(len( demon_number_floor))       \
+            ]
     #### average of demons: demon_number_avg
-    pass
+    demon_number_avg = [weight_floor[i]*demon_number_floor[i] +\
+                 weight_ceil[i]*demon_number_ceil[i] for i in range(len( demon_number_floor))]
     ####
-    demons=np.zeros([len(target_temps_range), 3])
+    demons=np.zeros([len(target_temps_range), 4])
     demons[:, 0]= target_temps_range
     demons[:, 1]= demon_number_ceil
     demons[:, 2]= demon_number_floor
     ### the average:
-    # demons[:, 3]= demon_number_avg
-    return demons
+    demons[:, 3]= demon_number_avg
+    return demons , weight_floor, weight_ceil

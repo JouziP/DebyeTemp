@@ -30,11 +30,11 @@ params, pcov = getOptimizedDebyeParams(Temps, Cp, *bounds)
 
 # get the demon number
 temps = [t*10 +1 for t in range(100)]
-demons=get_demons(Temps, Cp,  temps, *bounds)
+demons  , weight_floor, weight_ceil =get_demons(Temps, Cp,  temps, *bounds)
 
 
 #----------------------
-plt.plot(demons[:, 0],demons[:, 1:3],  '--', label='demons')
+plt.plot(demons[:, 0],demons[:, 1:4],  '--', label='demons')
 #----------------------
 
 
